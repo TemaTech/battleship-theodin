@@ -15,4 +15,4 @@ export const data = {
 };
 
 renderDefault();
-renderPlacing();
+renderStart();

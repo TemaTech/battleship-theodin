@@ -4,6 +4,8 @@ import { data } from '..';
 let AXIS = "X";
 
 export function renderPlacing() {
+  const content = document.querySelector('.content-container');
+  content.innerHTML = '';
   renderGrid();
   renderShipMenu();
   squareListeners();
@@ -50,16 +52,33 @@ function renderShipMenu() {
     }
     shipContainer.appendChild(ship);
   }
+
+  const axisButton = document.createElement('button');
+  axisButton.textContent = `Axis: ${AXIS}`;
+  axisButton.addEventListener('click', () => {
+    if (AXIS === 'X') {
+      AXIS = 'Y';
+    } else {
+      AXIS = 'X';
+    }
+    axisButton.textContent = `Axis: ${AXIS}`;
+  });
+  shipContainer.appendChild(axisButton);
+
   container.appendChild(shipContainer);
   const playButton = document.createElement('button');
   playButton.textContent = 'Play';
   playButton.classList = 'disabled-button';
+  playButton.setAttribute('id', 'play-button');
+  playButton.addEventListener('click', () => {
+    console.log('Hello')
+  });
   container.appendChild(playButton);
   content.appendChild(container);
 }
 
 function checkPlayButton() {
-  const button = document.querySelector('.container button');
+  const button = document.querySelector('button#play-button');
   
   if (Object.values(data.ships).every(val => val !== null && val !== undefined)) {
     button.classList.remove('disabled-button');
@@ -82,10 +101,18 @@ function squareListeners() {
         square.style.background = '#464646';
       });
       
-      for (let i = X; i < (X + shipLength); i++) {
-        if (validatePlacing([Y, X], "X", shipLength)) {
-          document.getElementById(`${Y}-${i}`).style.background = '#5c5c5c';
-        }  
+      if (AXIS === 'X') {
+        for (let i = X; i < (X + shipLength); i++) {
+          if (validatePlacing([Y, X], shipLength)) {
+            document.getElementById(`${Y}-${i}`).style.background = '#5c5c5c';
+          }  
+        }
+      } else {
+        for (let i = Y; i < (Y + shipLength); i++) {
+          if (validatePlacing([Y, X], shipLength)) {
+            document.getElementById(`${i}-${X}`).style.background = '#5c5c5c';
+          }  
+        }
       }
     });
 
@@ -93,7 +120,7 @@ function squareListeners() {
       const draggingShip = document.querySelector('.dragging-ship').id;
       const shipLength = parseInt(draggingShip.split('-')[1]);
 
-      if (validatePlacing([Y, X], "X", shipLength)) {
+      if (validatePlacing([Y, X], shipLength)) {
         e.preventDefault();
       }
     });
@@ -101,10 +128,13 @@ function squareListeners() {
     square.addEventListener('drop', (e) => {
       const shipData = e.dataTransfer.getData('text/plain');
 
-      if (validatePlacing([Y, X], "X", parseInt(shipData.split('-')[1]))) {
-        putData(shipData, "X", Y, X);
+      if (validatePlacing([Y, X], parseInt(shipData.split('-')[1]))) {
+        putData(shipData, Y, X);
         checkPlayButton();
         renderShipsOnGrid();
+        const ship = document.getElementById(shipData);
+        const container = document.querySelector('.ship-container');
+        container.removeChild(ship);
       }
     });
   });
@@ -121,20 +151,16 @@ function shipListeners() {
     ship.addEventListener('dragend', () => {
       ship.classList.remove('dragging-ship');
     });
-
-    ship.addEventListener('click', () => {
-      console.log('Hello')
-    });
   });
 }
 
-function validatePlacing(coordinates, axis, shipLength) {
+function validatePlacing(coordinates, shipLength) {
   const boolean = new Set();
   const Y = coordinates[0];
   const X = coordinates[1];
 
   // Check if the ship is in the range of the gameboard
-  if (axis === "X") {
+  if (AXIS === "X") {
     if (X + (shipLength - 1) < 10 && X + (shipLength - 1) >= 0) {
       boolean.add(true);
     } else {
@@ -149,11 +175,11 @@ function validatePlacing(coordinates, axis, shipLength) {
   }
 
   // Make sure that none of the squares within a range of 1 square from the current square have already been taken
-  if (axis === "X") {
+  if (AXIS === "X") {
     for (let i = X; i < X + shipLength; i++) {
       for (let y = Y - 1; y <= Y + 1; y++) {
-        for (let x = i - 1; x <= i + 1; x++) {
-          let element = document.getElementById(`${y}-${x}`);
+        for (let j = i - 1; j <= i + 1; j++) {
+          let element = document.getElementById(`${y}-${j}`);
           if (element && element.classList.contains('taken-square')) {
             boolean.add(false);
             break;
@@ -164,7 +190,7 @@ function validatePlacing(coordinates, axis, shipLength) {
   } else {
     for (let i = Y; i < Y + shipLength; i++) {
       for (let y = i - 1; y <= i + 1; y++) {
-        for (let x = X - 1; X <= i + 1; x++) {
+        for (let x = X - 1; x <= X + 1; x++) {
           let element = document.getElementById(`${y}-${x}`);
           if (element && element.classList.contains('taken-square')) {
             boolean.add(false);
@@ -179,8 +205,8 @@ function validatePlacing(coordinates, axis, shipLength) {
   return true;
 }
 
-function putData(shipData, axis, Y, X) {
-  data.ships[shipData] = `${Y}-${X}-${axis}`;
+function putData(shipData, Y, X) {
+  data.ships[shipData] = `${Y}-${X}-${AXIS}`;
 }
 
 function renderShipsOnGrid() {
@@ -198,7 +224,7 @@ function renderShipsOnGrid() {
     const coordinates = ships[ship].split('-');
     const Y = parseInt(coordinates[0]);
     const X = parseInt(coordinates[1]);
-    const axis = coordinates[2];
+    const axis = ships[ship].split('-')[2]
 
     if (axis === 'X') {
       for (let i = X; i < X + length; i++) {

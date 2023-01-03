@@ -1,8 +1,11 @@
 import './startCSS/start.css';
 import { data } from '..';
+import { renderPlacing } from './placing';
+import { renderDefault } from './default';
 
 export function renderStart() {
   const content = document.querySelector('.content-container');
+  content.innerHTML = '';
   const container = document.createElement('div');
   container.classList = 'start-container';
   const greeting = document.createElement('h3');
@@ -19,7 +22,7 @@ export function renderStart() {
   const continueButton = document.createElement('button');
   continueButton.addEventListener('click', () => {
     input.value === '' ? data.nickname = 'Player' : data.nickname = input.value;
-    // Next render...
+    renderPlacing();
   });
   continueButton.textContent = 'Continue';
   container.appendChild(continueButton);
