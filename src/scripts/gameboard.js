@@ -37,10 +37,10 @@ export class Gameboard {
       if (this.grid.get(square).isTaken !== false) {
         this.grid.get(square).isHit = true;
         this[this.grid.get(square).isTaken.codeName].hit();
-        this.lastAttack = true;
+        this.lastAttack = `${square}-${true}`;
       } else {
         this.grid.get(square).isHit = false;
-        this.lastAttack = false;
+        this.lastAttack = `${square}-${false}`;
       }
     }
   }
@@ -57,28 +57,6 @@ export class Gameboard {
     
     return true;
   }
-
-  // isValidPosition(square, codeName, axis) {
-  //   const ship = this[codeName];
-  //   const coordinates = [parseInt(square.split(',')[0]), parseInt(square.split(',')[1])];
-  //   const boolean = new Set();
-
-  //   if (axis === "X" && coordinates[1] + (ship.shipLength - 1) < 10 && coordinates[1] + (ship.shipLength - 1) >= 0) {
-  //     for (let i = 0; i < ship.shipLength; i++) {
-  //       this.grid.get(`${coordinates[0]},${coordinates[1] + i}`).isTaken === false ? boolean.add(true) : boolean.add(false);
-  //     }
-  //   } else if (axis === "Y" && coordinates[0] - (ship.shipLength - 1) >= 0 && coordinates[0] - (ship.shipLength - 1) < 10) {
-  //     for (let i = 0; i < ship.shipLength; i++) {
-  //       this.grid.get(`${coordinates[0] - i},${coordinates[1]}`).isTaken === false ? boolean.add(true) : boolean.add(false);
-  //     }
-  //   }   
-
-  //   if (!boolean.has(false)) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
 
   isValidPosition(square, codeName, axis) {
     const ship = this[codeName];

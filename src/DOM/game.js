@@ -20,8 +20,15 @@ export function renderGame() {
   computerSquares.forEach(square => {
     square.addEventListener('click', () => {
       if (!square.classList.contains('attacked')) {
-        console.log('Hello world');
         square.classList.add('attacked');
+        game.player.playerTurn(game.computer, square.id.split('-').join(','));
+        square.classList.add(game.computer.gameboard.lastAttack.split('-')[1]);
+        // Find the way how to get the square, then add the appropriate class to it.
+        if (!game.computer.gameboard.allSunk()) {
+          game.computer.computerTurn(game.player);
+        } else if (game.computer.gameboard.allSunk()) {
+          // Create a new window with the winner
+        }
       }
     });
   });
