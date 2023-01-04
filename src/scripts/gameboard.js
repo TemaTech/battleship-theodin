@@ -14,6 +14,7 @@ export class Gameboard {
     this.cruiser = new Ship(3, "cruiser");
     this.submarine = new Ship(3, "submarine");
     this.destroyer = new Ship(2, "destroyer");
+    this.lastAttack = null;
   }
 
   placeShip(square, codeName, axis) {
@@ -36,8 +37,10 @@ export class Gameboard {
       if (this.grid.get(square).isTaken !== false) {
         this.grid.get(square).isHit = true;
         this[this.grid.get(square).isTaken.codeName].hit();
+        this.lastAttack = true;
       } else {
         this.grid.get(square).isHit = false;
+        this.lastAttack = false;
       }
     }
   }
@@ -55,27 +58,58 @@ export class Gameboard {
     return true;
   }
 
+  // isValidPosition(square, codeName, axis) {
+  //   const ship = this[codeName];
+  //   const coordinates = [parseInt(square.split(',')[0]), parseInt(square.split(',')[1])];
+  //   const boolean = new Set();
+
+  //   if (axis === "X" && coordinates[1] + (ship.shipLength - 1) < 10 && coordinates[1] + (ship.shipLength - 1) >= 0) {
+  //     for (let i = 0; i < ship.shipLength; i++) {
+  //       this.grid.get(`${coordinates[0]},${coordinates[1] + i}`).isTaken === false ? boolean.add(true) : boolean.add(false);
+  //     }
+  //   } else if (axis === "Y" && coordinates[0] - (ship.shipLength - 1) >= 0 && coordinates[0] - (ship.shipLength - 1) < 10) {
+  //     for (let i = 0; i < ship.shipLength; i++) {
+  //       this.grid.get(`${coordinates[0] - i},${coordinates[1]}`).isTaken === false ? boolean.add(true) : boolean.add(false);
+  //     }
+  //   }   
+
+  //   if (!boolean.has(false)) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
+
   isValidPosition(square, codeName, axis) {
     const ship = this[codeName];
     const coordinates = [parseInt(square.split(',')[0]), parseInt(square.split(',')[1])];
     const boolean = new Set();
-
-    if (axis === "X" && coordinates[1] + (ship.shipLength - 1) < 10 && coordinates[1] + (ship.shipLength - 1) >= 0) {
-      for (let i = 0; i < ship.shipLength; i++) {
-        this.grid.get(`${coordinates[0]},${coordinates[1] + i}`).isTaken === false ? boolean.add(true) : boolean.add(false);
+  
+    if (axis === "X") {
+      for (let i = -1; i <= ship.shipLength; i++) {
+        for (let j = -1; j <= 1; j++) {
+          if (coordinates[0] + j < 10 && coordinates[0] + j >= 0 && coordinates[1] + i < 10 && coordinates[1] + i >= 0) {
+            boolean.add(this.grid.get(`${coordinates[0] + j},${coordinates[1] + i}`).isTaken === false);
+          }
+        }
       }
-    } else if (axis === "Y" && coordinates[0] - (ship.shipLength - 1) >= 0 && coordinates[0] - (ship.shipLength - 1) < 10) {
-      for (let i = 0; i < ship.shipLength; i++) {
-        this.grid.get(`${coordinates[0] - i},${coordinates[1]}`).isTaken === false ? boolean.add(true) : boolean.add(false);
+    } else if (axis === "Y") {
+      for (let i = -1; i <= 1; i++) {
+        for (let j = -1; j <= ship.shipLength; j++) {
+          if (coordinates[0] + i < 10 && coordinates[0] + i >= 0 && coordinates[1] + j < 10 && coordinates[1] + j >= 0) {
+            boolean.add(this.grid.get(`${coordinates[0] + i},${coordinates[1] + j}`).isTaken === false);
+          }
+        }
       }
-    }
-
+    }   
+  
     if (!boolean.has(false)) {
       return true;
     } else {
       return false;
     }
   }
+  
 
   placeShipsRandomly() {
     const ships = shuffle([this.carrier, this.battleship, this.cruiser, this.submarine, this.destroyer]);

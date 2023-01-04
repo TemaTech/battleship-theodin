@@ -1,5 +1,6 @@
 import './placingCSS/placing.css';
 import { data } from '..';
+import { renderGame } from './game';
 
 let AXIS = "X";
 
@@ -12,7 +13,7 @@ export function renderPlacing() {
   shipListeners();
 }
 
-function renderGrid() {
+export function renderGrid() {
   const content = document.querySelector('.content-container');
   const grid = document.createElement('div');
   grid.classList = 'grid';
@@ -71,7 +72,7 @@ function renderShipMenu() {
   playButton.classList = 'disabled-button';
   playButton.setAttribute('id', 'play-button');
   playButton.addEventListener('click', () => {
-    console.log('Hello')
+    renderGame();
   });
   container.appendChild(playButton);
   content.appendChild(container);
@@ -209,7 +210,7 @@ function putData(shipData, Y, X) {
   data.ships[shipData] = `${Y}-${X}-${AXIS}`;
 }
 
-function renderShipsOnGrid() {
+export function renderShipsOnGrid() {
   // Re-render the squares
   const takenSquares = document.querySelectorAll('.taken-square');
   takenSquares.forEach(square => {
