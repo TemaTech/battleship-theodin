@@ -4,6 +4,7 @@ import { renderGrid } from './placing';
 import { renderShipsOnGrid } from './placing';
 import { Game } from '../scripts/game';
 import explosionImg from './img/explosion.png';
+import { renderFinalScreen } from './finalScreen';
 
 export function renderGame() {
   const content = document.querySelector('.content-container');
@@ -57,12 +58,12 @@ export function renderGame() {
           }
           if (game.player.gameboard.allSunk()) {
             game.winner = game.computer;
-            // Make a winner screen with game.winner 
+            renderFinalScreen(game.winner);
             return;
           }
         } else if (game.computer.gameboard.allSunk()) {
           game.winner = game.player;
-            // Make a winner screen with game.winner 
+          renderFinalScreen(game.winner);
           return;
         }
       }

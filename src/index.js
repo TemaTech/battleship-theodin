@@ -3,9 +3,10 @@ import { renderDefault } from './DOM/default';
 import { renderStart } from './DOM/start';
 import { renderPlacing } from './DOM/placing';
 import { renderGame } from './DOM/game';
+import { renderFinalScreen } from './DOM/finalScreen';
 
 export const data = {
-  "nickname": "Cherartem",
+  "nickname": null,
   "ships": {
     "carrier-5": null,
     "battleship-4": null,
@@ -16,4 +17,4 @@ export const data = {
 };
 
 renderDefault();
-renderPlacing();
+renderStart();
