@@ -21,3 +21,18 @@
 .title-container p {
   color: rgb(187, 187, 187);
 }
+
+.square.false {
+  background-color: rgb(92, 92, 92);
+}
+
+.square.true {
+  position: relative;
+}
+
+.square.true img {
+  position: absolute;
+  z-index: 9999;
+  height: 100%;
+  width: 100%;
+}

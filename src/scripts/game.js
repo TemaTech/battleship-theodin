@@ -19,6 +19,8 @@ export class Game {
       const square = `${data[0]},${data[1]}`;
       const axis = data[2];
       this.player.gameboard.placeShip(square, shipName, axis);
+      console.log(square, shipName, axis);
+      console.log(this.player.gameboard.grid)
     }
   }
 }

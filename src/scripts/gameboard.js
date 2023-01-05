@@ -25,9 +25,9 @@ export class Gameboard {
       for (let i = 0; i < ship.shipLength; i++) {
         this.grid.get(`${coordinates[0]},${coordinates[1] + i}`).isTaken = ship;
       }
-    } else if (axis === "Y" && coordinates[0] - (ship.shipLength - 1) >= 0 && coordinates[0] - (ship.shipLength - 1) < 10) {
+    } else if (axis === "Y" && coordinates[0] + (ship.shipLength - 1) >= 0 && coordinates[0] + (ship.shipLength - 1) < 10) {
       for (let i = 0; i < ship.shipLength; i++) {
-        this.grid.get(`${coordinates[0] - i},${coordinates[1]}`).isTaken = ship;
+        this.grid.get(`${coordinates[0] + i},${coordinates[1]}`).isTaken = ship;
       }
     }
   }
@@ -62,25 +62,17 @@ export class Gameboard {
     const ship = this[codeName];
     const coordinates = [parseInt(square.split(',')[0]), parseInt(square.split(',')[1])];
     const boolean = new Set();
-  
-    if (axis === "X") {
-      for (let i = -1; i <= ship.shipLength; i++) {
-        for (let j = -1; j <= 1; j++) {
-          if (coordinates[0] + j < 10 && coordinates[0] + j >= 0 && coordinates[1] + i < 10 && coordinates[1] + i >= 0) {
-            boolean.add(this.grid.get(`${coordinates[0] + j},${coordinates[1] + i}`).isTaken === false);
-          }
-        }
+
+    if (axis === "X" && coordinates[1] + (ship.shipLength - 1) < 10 && coordinates[1] + (ship.shipLength - 1) >= 0) {
+      for (let i = 0; i < ship.shipLength; i++) {
+        this.grid.get(`${coordinates[0]},${coordinates[1] + i}`).isTaken === false ? boolean.add(true) : boolean.add(false);
       }
-    } else if (axis === "Y") {
-      for (let i = -1; i <= 1; i++) {
-        for (let j = -1; j <= ship.shipLength; j++) {
-          if (coordinates[0] + i < 10 && coordinates[0] + i >= 0 && coordinates[1] + j < 10 && coordinates[1] + j >= 0) {
-            boolean.add(this.grid.get(`${coordinates[0] + i},${coordinates[1] + j}`).isTaken === false);
-          }
-        }
+    } else if (axis === "Y" && coordinates[0] + (ship.shipLength - 1) >= 0 && coordinates[0] + (ship.shipLength - 1) < 10) {
+      for (let i = 0; i < ship.shipLength; i++) {
+        this.grid.get(`${coordinates[0] + i},${coordinates[1]}`).isTaken === false ? boolean.add(true) : boolean.add(false);
       }
     }   
-  
+
     if (!boolean.has(false)) {
       return true;
     } else {
