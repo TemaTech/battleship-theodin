@@ -1,6 +1,14 @@
 # Battleship
 A single player battleship game that was mode for The Odin Project's curriculum.
 
+# Screenshots
+![Start Menu]("/screenshots/start_menu.png");
+![Placing Ships Menu]("/screenshots/ship_placing_menu.png");
+![Game Process]("/screenshots/game.png");
+![Final Screen With Victory]("/screenshots/final_screen_victory.png");
+![Final Screen With Defeat]("/screenshots/final_screen_defeat.png");
+
+
 # Overview
 Battleship is a classic two-player strategy game; in this version of the game, the player plays against a computer. The game is played on a grid, with each player having a set of ships that they must strategically place on the grid. The goal is to sink all of your opponent's ships before they sink yours.
 
