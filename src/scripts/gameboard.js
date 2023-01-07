@@ -33,15 +33,14 @@ export class Gameboard {
   }
 
   receiveAttack(square) {
-    if (this.grid.get(square).isHit === null) {
-      if (this.grid.get(square).isTaken !== false) {
-        this.grid.get(square).isHit = true;
-        this[this.grid.get(square).isTaken.codeName].hit();
-        this.lastAttack = `${square}-${true}`;
-      } else {
-        this.grid.get(square).isHit = false;
-        this.lastAttack = `${square}-${false}`;
-      }
+    const sq = this.grid.get(square);
+    if (sq.isTaken === false) {
+      sq.isHit = false;
+      this.lastAttack = `${square}-${false}`;
+    } else {
+      sq.isHit = true;
+      this[sq.isTaken.codeName].hit();
+      this.lastAttack = `${square}-${true}`;
     }
   }
 
@@ -60,25 +59,82 @@ export class Gameboard {
 
   isValidPosition(square, codeName, axis) {
     const ship = this[codeName];
-    const coordinates = [parseInt(square.split(',')[0]), parseInt(square.split(',')[1])];
+    const Y = parseInt(square.split(',')[0]);
+    const X = parseInt(square.split(',')[1]);
     const boolean = new Set();
 
-    if (axis === "X" && coordinates[1] + (ship.shipLength - 1) < 10 && coordinates[1] + (ship.shipLength - 1) >= 0) {
-      for (let i = 0; i < ship.shipLength; i++) {
-        this.grid.get(`${coordinates[0]},${coordinates[1] + i}`).isTaken === false ? boolean.add(true) : boolean.add(false);
+    if (axis === 'X') {
+      if (X + ship.shipLength - 1 < 10 && X + ship.shipLength - 1 >= 0) {
+        for (let i = X; i < X + ship.shipLength; i++) {
+          this.grid.get(`${Y},${i}`).isTaken === false ? boolean.add(true) : boolean.add(false);
+          if (this.grid.get(`${Y - 1},${i}`)) {
+            this.grid.get(`${Y - 1},${i}`).isTaken === false ? boolean.add(true) : boolean.add(false);
+          }
+          if (this.grid.get(`${Y + 1},${i}`)) {
+            this.grid.get(`${Y + 1},${i}`).isTaken === false ? boolean.add(true) : boolean.add(false);
+          }
+          if (this.grid.get(`${Y},${i - 1}`)) {
+            this.grid.get(`${Y},${i - 1}`).isTaken === false ? boolean.add(true) : boolean.add(false);
+          }
+          if (this.grid.get(`${Y},${i + 1}`)) {
+            this.grid.get(`${Y},${i + 1}`).isTaken === false ? boolean.add(true) : boolean.add(false);
+          }
+          if (this.grid.get(`${Y - 1},${i - 1}`)) {
+            this.grid.get(`${Y - 1},${i - 1}`).isTaken === false ? boolean.add(true) : boolean.add(false);
+          }
+          if (this.grid.get(`${Y - 1},${i + 1}`)) {
+            this.grid.get(`${Y - 1},${i + 1}`).isTaken === false ? boolean.add(true) : boolean.add(false);
+          }
+          if (this.grid.get(`${Y + 1},${i + 1}`)) {
+            this.grid.get(`${Y + 1},${i + 1}`).isTaken === false ? boolean.add(true) : boolean.add(false);
+          }
+          if (this.grid.get(`${Y + 1},${i - 1}`)) {
+            this.grid.get(`${Y + 1},${i - 1}`).isTaken === false ? boolean.add(true) : boolean.add(false);
+          }
+        }
+      } else {
+        boolean.add(false);
       }
-    } else if (axis === "Y" && coordinates[0] + (ship.shipLength - 1) >= 0 && coordinates[0] + (ship.shipLength - 1) < 10) {
-      for (let i = 0; i < ship.shipLength; i++) {
-        this.grid.get(`${coordinates[0] + i},${coordinates[1]}`).isTaken === false ? boolean.add(true) : boolean.add(false);
+    } else {
+      if (Y + ship.shipLength - 1 < 10 && Y + ship.shipLength - 1 >= 0) {
+        for (let i = Y; i < Y + ship.shipLength; i++) {
+          this.grid.get(`${i},${X}`).isTaken === false ? boolean.add(true) : boolean.add(false);
+          if (this.grid.get(`${i - 1},${X}`)) {
+            this.grid.get(`${i - 1},${X}`).isTaken === false ? boolean.add(true) : boolean.add(false);
+          }
+          if (this.grid.get(`${i + 1},${X}`)) {
+            this.grid.get(`${i + 1},${X}`).isTaken === false ? boolean.add(true) : boolean.add(false);
+          }
+          if (this.grid.get(`${i},${X - 1}`)) {
+            this.grid.get(`${i},${X - 1}`).isTaken === false ? boolean.add(true) : boolean.add(false);
+          }
+          if (this.grid.get(`${i},${X + 1}`)) {
+            this.grid.get(`${i},${X + 1}`).isTaken === false ? boolean.add(true) : boolean.add(false);
+          }
+          if (this.grid.get(`${i - 1},${X - 1}`)) {
+            this.grid.get(`${i - 1},${X - 1}`).isTaken === false ? boolean.add(true) : boolean.add(false);
+          }
+          if (this.grid.get(`${i - 1},${X + 1}`)) {
+            this.grid.get(`${i - 1},${X + 1}`).isTaken === false ? boolean.add(true) : boolean.add(false);
+          }
+          if (this.grid.get(`${i + 1},${X + 1}`)) {
+            this.grid.get(`${i + 1},${X + 1}`).isTaken === false ? boolean.add(true) : boolean.add(false);
+          }
+          if (this.grid.get(`${i + 1},${X - 1}`)) {
+            this.grid.get(`${i + 1},${X - 1}`).isTaken === false ? boolean.add(true) : boolean.add(false);
+          }
+        }
+      } else {
+        boolean.add(false);
       }
-    }   
+    }
 
     if (!boolean.has(false)) {
       return true;
     } else {
       return false;
     }
-  }
+  } 
   
 
   placeShipsRandomly() {
@@ -124,3 +180,9 @@ export class Gameboard {
     }
   }
 }
+
+// #1 Validation doesn't work properly, a ship can't be placed in the range of 1 square nearby an other ship
+// #2 allSunk() function doesn't work properly, computer wins before it has sunk all of players ship
+// #3 placeShip() funciton doesn't work correctly, even though the player has sunk all of the computer's ships, the player doesn't win
+// because not all ships are placed
+// #4 Animations and trasnsitions have to be added

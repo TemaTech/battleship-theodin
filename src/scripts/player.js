@@ -3,12 +3,4 @@ export class Player {
     this.gameboard = gameboard;
     this.nickname = nickname;
   }
-
-  playerTurn(enemy, square) {
-    enemy.gameboard.receiveAttack(square);
-  }
-
-  computerTurn(enemy) {
-    enemy.gameboard.randomAttack();
-  }
 }

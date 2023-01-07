@@ -21,4 +21,25 @@ export class Game {
       this.player.gameboard.placeShip(square, shipName, axis);
     }
   }
+
+  takeTurn(square) {
+    this.computer.gameboard.receiveAttack(square);
+
+    if (this.computer.gameboard.allSunk()) {
+      this.winner = this.player;
+      return;
+    }
+
+    this.player.gameboard.randomAttack();
+
+    if (this.player.gameboard.allSunk()) {
+      this.winner = this.computer;
+      return;
+    }
+  }
+
+  canComputerSquareBeAttacked(square) {
+    const sq = this.computer.gameboard.grid.get(square);
+    return sq.isHit === null ? true : false;
+  }
 }

@@ -13,59 +13,43 @@ export function renderGame() {
   renderPlayerGrid();
   renderComputerGrid();
 
-  const computerSquares = document.querySelectorAll('.grid:nth-of-type(2) .square');
-  const playerSquares = document.querySelectorAll('#player-grid.grid .square');
+  const computerSquares = document.querySelectorAll('.grid:nth-of-type(2) .square')
+  const playerSquares = document.querySelectorAll('.grid:nth-of-type(1) .square');
 
-  const game = new Game();
-  renderTitle(game);
-  game.placeAllPlayerShips(data.ships);
-  computerSquares.forEach(square => {
+  const GAME = new Game();
+  GAME.placeAllPlayerShips(data.ships);
+  GAME.computer.gameboard.grid.forEach((value, key) => {
+    if (value.isTaken !== false) {
+      computerSquares.forEach(square => {
+        if (square.id === key.split(',').join('-')) {
+          square.style.background = '#FFF'
+        }
+      });
+    }
+  });
+  renderTitle(GAME);
+  document.querySelectorAll('.grid:nth-of-type(2) .square').forEach(square => {
     square.addEventListener('click', () => {
-      if (!square.classList.contains('attacked')) {
-        square.classList.add('attacked');
-        game.player.playerTurn(game.computer, square.id.split('-').join(','));
-        const playerAttackResult = game.computer.gameboard.lastAttack.split('-');
-        const coordinates1 = playerAttackResult[0].split(',').join('-');
-        let sq1;
-        for (let i = 0; i < computerSquares.length; i++) {
-          if (computerSquares[i].id === coordinates1) {
-            sq1 = computerSquares[i];
-            break;
+      const squareKey = square.id.split('-').join(',');
+      if (GAME.canComputerSquareBeAttacked(squareKey)) {
+        GAME.takeTurn(squareKey);
+        
+        let computerSq;
+        computerSquares.forEach(sq => {
+          if (sq.id === getLastAttackID(GAME.computer)) {
+            computerSq = sq;
           }
-        }
-        sq1.classList.add(playerAttackResult[1]);
-        if (playerAttackResult[1] == 'true') {
-          const img = document.createElement('img');
-          img.src = explosionImg;
-          sq1.appendChild(img);
-        }
-        if (!game.computer.gameboard.allSunk()) {
-          game.computer.computerTurn(game.player);
-          const computerAttackResult = game.player.gameboard.lastAttack.split('-');
-          const coordinates2 = computerAttackResult[0].split(',').join('-');
-          let sq2;
-          for (let i = 0; i < playerSquares.length; i++) {
-            if (playerSquares[i].id === coordinates2) {
-              sq2 = playerSquares[i];
-              break;
-            }
+        });
+        
+        let playerSq;
+        playerSquares.forEach(sq => {
+          if (sq.id === getLastAttackID(GAME.player)) {
+            playerSq = sq;
           }
-          sq2.classList.add(computerAttackResult[1]);
-          if (computerAttackResult[1] == 'true') {
-            const img = document.createElement('img');
-            img.src = explosionImg;
-            sq2.appendChild(img);
-          }
-          if (game.player.gameboard.allSunk()) {
-            game.winner = game.computer;
-            renderFinalScreen(game.winner);
-            return;
-          }
-        } else if (game.computer.gameboard.allSunk()) {
-          game.winner = game.player;
-          renderFinalScreen(game.winner);
-          return;
-        }
+        });
+
+        styleSquare(GAME.computer, computerSq);
+        styleSquare(GAME.player, playerSq);
       }
     });
   });
@@ -95,3 +79,16 @@ function renderComputerGrid() {
   renderGrid();
 }
 
+function styleSquare(entity, square) {
+  square.classList.add(entity.gameboard.lastAttack.split('-')[1]);
+  if (entity.gameboard.lastAttack.split('-')[1] == 'true') {
+    const img = document.createElement('img');
+    img.src = explosionImg;
+    square.appendChild(img);
+  }
+}
+
+function getLastAttackID(entity) {
+  const square = entity.gameboard.lastAttack.split('-')[0].split(',').join('-');
+  return square;
+}

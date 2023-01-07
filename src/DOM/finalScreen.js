@@ -2,8 +2,11 @@ import './finalScreenCSS/finalScreen.css';
 import { data } from '..';
 import victoryTrophy from './img/trophy.png';
 import surrenderImg from './img/peace.png';
+import { renderDefault } from './default';
 
 export function renderFinalScreen(winner) {
+  document.querySelector('body').innerHTML = '';
+  renderDefault();
   if (winner == data.nickname) {
     renderVictoryScreen();
   } else {
