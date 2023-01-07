@@ -19,3 +19,4 @@ This web app was built with:
 - SASS
 - Webpack
 - Jest
+- HTML
