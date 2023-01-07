@@ -6,7 +6,7 @@ A single player battleship game that was made for The Odin Project's curriculum.
   <img src="/screenshots/start_menu.png" alt="Start Menu" title="Start Menu">
   <img src="/screenshots/ship_placing_menu.png" alt="Placing Ships Menu" title="Placing Ships Menu">
   <img src="/screenshots/game.png" alt="Game Process" title="Game Process">
-  <img src="/screenshots/final_screen_victory.png" alt="Defeat Screen" title="Defeat Screen">
+  <img src="/screenshots/final_screen_defeat.png" alt="Defeat Screen" title="Defeat Screen">
   <img src="/screenshots/final_screen_victory.png" alt="Victory Screen" title="Victory Screen">
 </div>
 
