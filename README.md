@@ -1,5 +1,5 @@
 # Battleship
-A single player battleship game that was mode for The Odin Project's curriculum.
+A single player battleship game that was made for The Odin Project's curriculum.
 
 # Screenshots
 ![Start Menu]("/screenshots/start_menu.png");
