@@ -6,6 +6,7 @@ let AXIS = "X";
 
 export function renderPlacing() {
   const content = document.querySelector('.content-container');
+  content.style.animation = 'fadeInOpacity 500ms';
   content.innerHTML = '';
   renderGrid();
   renderShipMenu();
@@ -72,7 +73,10 @@ function renderShipMenu() {
   playButton.classList = 'disabled-button';
   playButton.setAttribute('id', 'play-button');
   playButton.addEventListener('click', () => {
-    renderGame();
+    document.querySelector('.content-container').style.animation = 'fadeOutOpacity 500ms';
+    setTimeout(() => {
+      renderGame();
+    }, 450);
   });
   container.appendChild(playButton);
   content.appendChild(container);

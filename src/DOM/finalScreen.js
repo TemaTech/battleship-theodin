@@ -5,6 +5,7 @@ import surrenderImg from './img/peace.png';
 import { renderDefault } from './default';
 
 export function renderFinalScreen(winner) {
+  document.querySelector('.content-container').style.animation = 'fadeOutOpacity 500ms';
   document.querySelector('body').innerHTML = '';
   renderDefault();
   if (winner.nickname == data.nickname) {

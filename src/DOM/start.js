@@ -24,7 +24,10 @@ export function renderStart() {
   continueButton.addEventListener('click', () => {
     if (input.value !== 'Computer') {
       input.value === '' ? data.nickname = 'Player' : data.nickname = input.value;
-      renderPlacing();
+      content.style.animation = 'fadeOutOpacity 500ms';
+      setTimeout(() => {
+        renderPlacing();
+      }, 450);
     }
   });
   continueButton.textContent = 'Continue';

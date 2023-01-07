@@ -8,6 +8,7 @@ import { renderFinalScreen } from './finalScreen';
 
 export function renderGame() {
   const content = document.querySelector('.content-container');
+  content.style.animation = 'fadeInOpacity 500ms';
   content.style.display = 'grid';
   content.innerHTML = '';
   renderPlayerGrid();
@@ -18,15 +19,6 @@ export function renderGame() {
 
   const GAME = new Game();
   GAME.placeAllPlayerShips(data.ships);
-  GAME.computer.gameboard.grid.forEach((value, key) => {
-    if (value.isTaken !== false) {
-      computerSquares.forEach(square => {
-        if (square.id === key.split(',').join('-')) {
-          square.style.background = '#FFF'
-        }
-      });
-    }
-  });
   renderTitle(GAME);
   document.querySelectorAll('.grid:nth-of-type(2) .square').forEach(square => {
     square.addEventListener('click', () => {
@@ -34,8 +26,10 @@ export function renderGame() {
       if (GAME.canComputerSquareBeAttacked(squareKey)) {
         GAME.takeTurn(squareKey);
         if (GAME.winner !== null) {
-          console.log(GAME.winner.nickname, data.nickname)
-          renderFinalScreen(GAME.winner);
+          content.style.animation = 'fadeOutOpacity 500ms';
+          setTimeout(() => {
+            renderFinalScreen(GAME.winner);
+          }, 450);
         }
         
         let computerSq;
