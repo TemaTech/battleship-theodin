@@ -33,6 +33,10 @@ export function renderGame() {
       const squareKey = square.id.split('-').join(',');
       if (GAME.canComputerSquareBeAttacked(squareKey)) {
         GAME.takeTurn(squareKey);
+        if (GAME.winner !== null) {
+          console.log(GAME.winner.nickname, data.nickname)
+          renderFinalScreen(GAME.winner);
+        }
         
         let computerSq;
         computerSquares.forEach(sq => {

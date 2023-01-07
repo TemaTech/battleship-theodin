@@ -28,3 +28,8 @@
 .start-container div p {
   color: rgb(180, 180, 180);
 }
+
+button.blocked-btn {
+  pointer-events: none;
+  opacity: .5;
+}

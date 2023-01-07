@@ -7,7 +7,7 @@ import { renderDefault } from './default';
 export function renderFinalScreen(winner) {
   document.querySelector('body').innerHTML = '';
   renderDefault();
-  if (winner == data.nickname) {
+  if (winner.nickname == data.nickname) {
     renderVictoryScreen();
   } else {
     renderDefeatScreen();

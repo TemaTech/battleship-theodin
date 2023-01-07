@@ -23,6 +23,16 @@ export class Game {
   }
 
   takeTurn(square) {
+    if (this.computer.gameboard.allSunk()) {
+      this.winner = this.player;
+      return;
+    }
+
+    if (this.player.gameboard.allSunk()) {
+      this.winner = this.computer;
+      return;
+    }
+
     this.computer.gameboard.receiveAttack(square);
 
     if (this.computer.gameboard.allSunk()) {

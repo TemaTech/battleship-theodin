@@ -12,6 +12,7 @@ export function renderStart() {
   greeting.textContent = 'Welcome back, general.';
   container.appendChild(greeting);
   const inputField = document.createElement('div');
+  inputField.classList = 'input-field';
   const label = document.createElement('p');
   label.textContent = 'Enter your nickname:';
   inputField.appendChild(label);
@@ -21,10 +22,19 @@ export function renderStart() {
   container.appendChild(inputField);
   const continueButton = document.createElement('button');
   continueButton.addEventListener('click', () => {
-    input.value === '' ? data.nickname = 'Player' : data.nickname = input.value;
-    renderPlacing();
+    if (input.value !== 'Computer') {
+      input.value === '' ? data.nickname = 'Player' : data.nickname = input.value;
+      renderPlacing();
+    }
   });
   continueButton.textContent = 'Continue';
   container.appendChild(continueButton);
   content.appendChild(container);
+  input.addEventListener('input', () => {
+    if (input.value === 'Computer') {
+      continueButton.classList.add('blocked-btn');
+    } else {
+      continueButton.classList.remove('blocked-btn');
+    }
+  });
 }
